@@ -1,0 +1,29 @@
+<div class="container">
+  <h1>{{ title }}</h1>
+
+  <h2>Leerlingen en hun Coaches</h2>
+  @if (leerlingen.length > 0) {
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Naam</th>
+          <th>Coach</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (leerling of leerlingen; track leerling.id) {
+          <tr>
+            <td>{{ leerling.id }}</td>
+            <td>{{ leerling.naam }}</td>
+            <td>{{ leerling.coachNaam || 'Geen coach' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p>Geen leerlingen gevonden of data wordt geladen...</p>
+  }
+
+  <router-outlet></router-outlet>
+</div>

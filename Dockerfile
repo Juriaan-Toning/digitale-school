@@ -1,23 +1,19 @@
 
 # ==========================================
 # Stage 1: Build Angular frontend
-# ==========================================
 FROM node:22-bookworm-slim AS frontend-build
 
 WORKDIR /app/frontend
 
-# Update npm
-RUN npm install -g npm@12.2.2
+COPY frontend/package*.json ./
 
-COPY frontend/package.json frontend/package-lock.json ./
-
-# Clean npm cache and install dependencies
-RUN npm cache clean --force \
-    && npm ci --no-audit --no-fund
+# Installeer dependencies (inclusief devDependencies voor de CLI)
+RUN npm ci --no-audit --no-fund
 
 COPY frontend/ ./
 
-RUN npm run build
+# Gebruik npx om de lokale angular-cli aan te roepen, voorkomt permissie problemen
+RUN npx ng build
 
 
 
@@ -32,7 +28,8 @@ COPY pom.xml ./
 COPY src ./src
 
 # Copy Angular build into Spring Boot static resources
-COPY --from=frontend-build /app/frontend/dist/digitale-school-frontend/ ./src/main/resources/static/
+# Opmerking: dist pad kan variëren per Angular versie, controleer of /browser nodig is
+COPY --from=frontend-build /app/frontend/dist/digitale-school-frontend/browser/ ./src/main/resources/static/
 
 # Build Spring Boot application
 RUN mvn clean package -DskipTests

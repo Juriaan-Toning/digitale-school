@@ -1,30 +1,46 @@
-# Gebruik een multi-stage build voor een efficiënte Docker image
 
-# Stage 1: Build het Angular frontend
+# ==========================================
+# Stage 1: Build Angular frontend
+# ==========================================
 FROM node:22-alpine AS frontend-build
+
 WORKDIR /app/frontend
-COPY frontend/package*.json ./
-RUN npm install
+
+COPY frontend/package.json frontend/package-lock.json ./
+
+RUN npm ci --no-audit --no-fund
+
 COPY frontend/ ./
+
 RUN npm run build
 
-# Stage 2: Build het Spring Boot backend (Kotlin)
+
+# ==========================================
+# Stage 2: Build Spring Boot backend
+# ==========================================
 FROM maven:3.9.9-eclipse-temurin-21-alpine AS backend-build
+
 WORKDIR /app
-COPY pom.xml .
+
+COPY pom.xml ./
 COPY src ./src
-# Kopieer de frontend build naar de static resources van Spring Boot
-# zodat het backend de frontend bestanden kan serveren
-COPY --from=frontend-build /app/frontend/dist/digitale-school-frontend/browser ./src/main/resources/static
+
+# Copy Angular build into Spring Boot static resources
+COPY --from=frontend-build /app/frontend/dist/digitale-school-frontend/ ./src/main/resources/static/
+
+# Build Spring Boot application
 RUN mvn clean package -DskipTests
 
-# Stage 3: Runtime image
+
+# ==========================================
+# Stage 3: Runtime
+# ==========================================
 FROM eclipse-temurin:21-jre-alpine
+
 WORKDIR /app
+
 COPY --from=backend-build /app/target/*.jar app.jar
 
-# Render gebruikt de PORT omgevingsvariabele
 EXPOSE 8080
 
-# Start de applicatie
 ENTRYPOINT ["java", "-jar", "app.jar"]

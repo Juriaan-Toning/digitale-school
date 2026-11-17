@@ -12,8 +12,8 @@ RUN npm ci --no-audit --no-fund
 
 COPY frontend/ ./
 
-# Gebruik npx om de lokale angular-cli aan te roepen, voorkomt permissie problemen
-RUN npx ng build
+# Zorg dat de ng executable uitvoerbaar is en bouw de frontend
+RUN chmod +x node_modules/.bin/ng && ./node_modules/.bin/ng build
 
 
 

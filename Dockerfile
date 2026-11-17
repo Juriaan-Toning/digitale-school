@@ -2,17 +2,23 @@
 # ==========================================
 # Stage 1: Build Angular frontend
 # ==========================================
-FROM node:22-alpine AS frontend-build
+FROM node:22-bookworm-slim AS frontend-build
 
 WORKDIR /app/frontend
 
+# Update npm
+RUN npm install -g npm@12.2.2
+
 COPY frontend/package.json frontend/package-lock.json ./
 
-RUN npm ci --no-audit --no-fund
+# Clean npm cache and install dependencies
+RUN npm cache clean --force \
+    && npm ci --no-audit --no-fund
 
 COPY frontend/ ./
 
 RUN npm run build
+
 
 
 # ==========================================

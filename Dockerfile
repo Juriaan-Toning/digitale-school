@@ -13,6 +13,7 @@ RUN npm ci --no-audit --no-fund
 COPY frontend/ ./
 
 # Zorg dat de ng executable uitvoerbaar is en bouw de frontend
+# We gebruiken een wildcard om de bestanden uit de dist map te kopiëren, ongeacht of er een /browser submap is
 RUN chmod +x node_modules/.bin/ng && ./node_modules/.bin/ng build
 
 
@@ -28,8 +29,9 @@ COPY pom.xml ./
 COPY src ./src
 
 # Copy Angular build into Spring Boot static resources
-# Opmerking: dist pad kan variëren per Angular versie, controleer of /browser nodig is
-COPY --from=frontend-build /app/frontend/dist/digitale-school-frontend/browser/ ./src/main/resources/static/
+# We kopiëren alles uit de dist map naar de static resources. 
+# De wildcard zorgt ervoor dat we zowel de directie bestanden als submappen (zoals /browser) meenemen.
+COPY --from=frontend-build /app/frontend/dist/digitale-school-frontend/ ./src/main/resources/static/
 
 # Build Spring Boot application
 RUN mvn clean package -DskipTests

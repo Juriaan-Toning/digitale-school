@@ -19,7 +19,13 @@ object DatabaseFactory {
 
     fun getConnection(): Connection {
         checkCredentials()
-        return DriverManager.getConnection(url!!, user!!, password!!)
+        val props = java.util.Properties()
+        props.setProperty("user", user!!)
+        props.setProperty("password", password!!)
+        props.setProperty("ssl", "true")
+        props.setProperty("sslmode", "require")
+        
+        return DriverManager.getConnection(url!!, props)
     }
 
     fun fetchLeerlingen(): List<Leerling> {

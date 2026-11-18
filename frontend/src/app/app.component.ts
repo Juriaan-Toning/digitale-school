@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LeerlingService } from './leerling.service';
 import { Leerling } from './leerling.model';
@@ -14,11 +14,14 @@ export class AppComponent implements OnInit {
   title = 'Digitale School';
   leerlingen: Leerling[] = [];
   private leerlingService = inject(LeerlingService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.leerlingService.getLeerlingen().subscribe({
       next: (data) => {
+        console.log('Data ontvangen in component:', data);
         this.leerlingen = data;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching leerlingen', err);

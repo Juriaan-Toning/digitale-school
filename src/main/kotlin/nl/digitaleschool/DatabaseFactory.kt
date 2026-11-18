@@ -4,17 +4,23 @@ import java.sql.Connection
 import java.sql.DriverManager
 
 object DatabaseFactory {
-    private val url = System.getenv("DB_URL")
-    private val user = System.getenv("DB_USER")
-    private val password = System.getenv("DB_PASSWORD")
+    private val url: String? get() = System.getenv("DB_URL")
+    private val user: String? get() = System.getenv("DB_USER")
+    private val password: String? get() = System.getenv("DB_PASSWORD")
 
-    init {
+    private fun checkCredentials() {
         if (url == null || user == null || password == null) {
-            throw IllegalStateException("Database omgevingsvariabelen (DB_URL, DB_USER, DB_PASSWORD) ontbreken.")
+            throw IllegalStateException(
+                "Database omgevingsvariabelen (DB_URL, DB_USER, DB_PASSWORD) ontbreken. " +
+                "Controleer of ze zijn ingesteld in het Render Dashboard onder 'Environment Variables' (niet 'Secret Files')."
+            )
         }
     }
 
-    fun getConnection(): Connection = DriverManager.getConnection(url!!, user!!, password!!)
+    fun getConnection(): Connection {
+        checkCredentials()
+        return DriverManager.getConnection(url!!, user!!, password!!)
+    }
 
     fun fetchLeerlingen(): List<Leerling> {
         val leerlingen = mutableListOf<Leerling>()

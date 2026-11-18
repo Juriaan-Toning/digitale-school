@@ -8,7 +8,7 @@ import { Leerling } from './leerling.model';
 })
 export class LeerlingService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/leerlingen';
+  private apiUrl = '/api/leerlingen';
 
   getLeerlingen(): Observable<Leerling[]> {
     return this.http.get<Leerling[]>(this.apiUrl);

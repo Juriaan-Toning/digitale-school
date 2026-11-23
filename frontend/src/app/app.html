@@ -16,18 +16,18 @@
     </mat-card-header>
     
     <mat-card-content>
-      @if (leerlingen.length > 0) {
-        <table mat-table [dataSource]="leerlingen" class="mat-elevation-z8">
+      @if (leerlingen.data.length > 0) {
+        <table mat-table [dataSource]="leerlingen" matSort class="mat-elevation-z8">
           
           <!-- Naam Column -->
           <ng-container matColumnDef="naam">
-            <th mat-header-cell *matHeaderCellDef> Naam </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Naam </th>
             <td mat-cell *matCellDef="let leerling"> {{leerling.naam}} </td>
           </ng-container>
 
           <!-- Coach Column -->
           <ng-container matColumnDef="coachNaam">
-            <th mat-header-cell *matHeaderCellDef> Coach </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Coach </th>
             <td mat-cell *matCellDef="let leerling">
               <mat-form-field appearance="fill">
                 <mat-select [value]="leerling.coachId" (selectionChange)="onCoachChange(leerling, $event.value)">
@@ -42,7 +42,7 @@
 
           <!-- Startgesprek Column -->
           <ng-container matColumnDef="startGesprek">
-            <th mat-header-cell *matHeaderCellDef> Startgesprek </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Startgesprek </th>
             <td mat-cell *matCellDef="let leerling">
               <mat-form-field appearance="fill" (click)="$event.stopPropagation()">
                 <input matInput [matDatepicker]="pickerStart" 
@@ -57,7 +57,7 @@
 
           <!-- Eval 1 Column -->
           <ng-container matColumnDef="evaluatieGesprek1">
-            <th mat-header-cell *matHeaderCellDef> Eval 1 </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Eval 1 </th>
             <td mat-cell *matCellDef="let leerling">
               <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="picker1" 
@@ -72,7 +72,7 @@
 
           <!-- Eval 2 Column -->
           <ng-container matColumnDef="evaluatieGesprek2">
-            <th mat-header-cell *matHeaderCellDef> Eval 2 </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Eval 2 </th>
             <td mat-cell *matCellDef="let leerling">
               <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="picker2" 
@@ -87,7 +87,7 @@
 
           <!-- Eval 3 Column -->
           <ng-container matColumnDef="evaluatieGesprek3">
-            <th mat-header-cell *matHeaderCellDef> Eval 3 </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Eval 3 </th>
             <td mat-cell *matCellDef="let leerling">
               <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="picker3" 
@@ -102,7 +102,7 @@
 
           <!-- Eval 4 Column -->
           <ng-container matColumnDef="evaluatieGesprek4">
-            <th mat-header-cell *matHeaderCellDef> Eval 4 </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Eval 4 </th>
             <td mat-cell *matCellDef="let leerling">
               <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="picker4" 
@@ -117,7 +117,7 @@
 
           <!-- Eindgesprek Column -->
           <ng-container matColumnDef="eindGesprek">
-            <th mat-header-cell *matHeaderCellDef> Eindgesprek </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Eindgesprek </th>
             <td mat-cell *matCellDef="let leerling">
               <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="pickerEind" 

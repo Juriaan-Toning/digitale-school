@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit, ViewChild} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -7,7 +7,7 @@ import {Leerling} from './models/leerling.model';
 import {Coach} from './models/coach.model';
 
 // Material Imports
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -18,6 +18,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatSort, MatSortModule} from '@angular/material/sort';
 
 import {AddLeerlingDialogComponent} from './components/add-leerling-dialog/add-leerling-dialog.component';
 import {AddCoachDialogComponent} from './components/add-coach-dialog/add-coach-dialog.component';
@@ -39,14 +40,15 @@ import {AddCoachDialogComponent} from './components/add-coach-dialog/add-coach-d
     MatIconModule,
     MatButtonModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSortModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class AppComponent implements OnInit {
   title = 'Digitale School';
-  leerlingen: Leerling[] = [];
+  leerlingen = new MatTableDataSource<Leerling>([]);
   coaches: Coach[] = [];
   displayedColumns: string[] = [
     'naam', 
@@ -60,6 +62,8 @@ export class AppComponent implements OnInit {
   ];
   editingField: { id: number, field: string } | null = null;
 
+  @ViewChild(MatSort) sort!: MatSort;
+
   private leerlingService = inject(LeerlingService);
   private cdr = inject(ChangeDetectorRef);
   private dialog = inject(MatDialog);
@@ -72,7 +76,18 @@ export class AppComponent implements OnInit {
   loadLeerlingen() {
     this.leerlingService.getLeerlingen().subscribe({
       next: (data) => {
-        this.leerlingen = data;
+        this.leerlingen.data = data;
+        this.leerlingen.sort = this.sort;
+        this.leerlingen.sortingDataAccessor = (item, property) => {
+          switch (property) {
+            case 'coachNaam':
+              // Zoek de coach naam op basis van coachId als coachNaam niet direct betrouwbaar is,
+              // of gebruik coachNaam als deze door de backend wordt meegegeven.
+              return item.coachNaam || '';
+            default:
+              return (item as any)[property];
+          }
+        };
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -109,10 +124,8 @@ export class AppComponent implements OnInit {
     // Formatteer naar yyyy-mm-dd voor backend (ISO string split)
     const offset = date.getTimezoneOffset();
     const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
-    const formattedDate = adjustedDate.toISOString().split('T')[0];
-
     // Update lokaal
-    (leerling as any)[field] = formattedDate;
+    (leerling as any)[field] = adjustedDate.toISOString().split('T')[0];
     
     // Sla op in backend
     this.saveLeerling(leerling);

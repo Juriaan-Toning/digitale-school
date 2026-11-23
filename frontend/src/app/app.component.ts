@@ -2,9 +2,9 @@ import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {LeerlingService} from './leerling.service';
-import {Leerling} from './leerling.model';
-import {Coach} from './coach.model';
+import {LeerlingService} from './services/leerling.service';
+import {Leerling} from './models/leerling.model';
+import {Coach} from './models/coach.model';
 
 // Material Imports
 import {MatTableModule} from '@angular/material/table';

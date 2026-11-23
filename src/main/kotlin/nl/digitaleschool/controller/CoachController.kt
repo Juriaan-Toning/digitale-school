@@ -1,5 +1,8 @@
-package nl.digitaleschool
+package nl.digitaleschool.controller
 
+import nl.digitaleschool.DatabaseFactory
+import nl.digitaleschool.model.Coach
+import nl.digitaleschool.model.CoachCreateDto
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -26,9 +29,9 @@ class CoachController {
     }
 
     @PostMapping
-    fun addCoach(@RequestBody coach: Coach) {
+    fun addCoach(@RequestBody coachDto: CoachCreateDto) {
         try {
-            DatabaseFactory.addCoach(coach.naam)
+            DatabaseFactory.addCoach(coachDto.naam)
         } catch (e: Exception) {
             logger.error("Fout bij het toevoegen van coach", e)
             throw e

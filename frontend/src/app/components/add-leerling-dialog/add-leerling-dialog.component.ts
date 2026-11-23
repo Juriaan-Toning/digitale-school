@@ -7,8 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
-import { Leerling } from '../../leerling.model';
-import { Coach } from '../../coach.model';
+import { Leerling } from '../../models/leerling.model';
+import { Coach } from '../../models/coach.model';
 
 @Component({
   selector: 'app-add-leerling-dialog',

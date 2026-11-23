@@ -1,5 +1,8 @@
 package nl.digitaleschool
 
+import nl.digitaleschool.model.Coach
+import nl.digitaleschool.model.Leerling
+import nl.digitaleschool.model.LeerlingCreateDto
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.Properties
@@ -87,7 +90,7 @@ object DatabaseFactory {
         }
     }
 
-    fun addLeerling(leerling: Leerling) {
+    fun addLeerling(leerling: LeerlingCreateDto) {
         getConnection().use { connection ->
             val query = """
                 INSERT INTO leerlingen (naam, coach, eval_gesprek_1, eval_gesprek_2, eval_gesprek_3, eval_gesprek_4, eindgesprek, startgesprek)

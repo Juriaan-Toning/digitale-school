@@ -1,5 +1,8 @@
-package nl.digitaleschool
+package nl.digitaleschool.controller
 
+import nl.digitaleschool.DatabaseFactory
+import nl.digitaleschool.model.Leerling
+import nl.digitaleschool.model.LeerlingCreateDto
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -38,9 +41,9 @@ class LeerlingController {
     }
 
     @PostMapping
-    fun addLeerling(@RequestBody leerling: Leerling) {
+    fun addLeerling(@RequestBody leerlingDto: LeerlingCreateDto) {
         try {
-            DatabaseFactory.addLeerling(leerling)
+            DatabaseFactory.addLeerling(leerlingDto)
         } catch (e: Exception) {
             logger.error("Fout bij het toevoegen van leerling", e)
             throw e

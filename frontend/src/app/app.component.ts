@@ -61,8 +61,11 @@ export class AppComponent implements OnInit {
     'eindGesprek'
   ];
   editingField: { id: number, field: string } | null = null;
+  isLoading = false;
 
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) set matSort(sort: MatSort) {
+    this.leerlingen.sort = sort;
+  }
 
   private leerlingService = inject(LeerlingService);
   private cdr = inject(ChangeDetectorRef);
@@ -74,10 +77,10 @@ export class AppComponent implements OnInit {
   }
 
   loadLeerlingen() {
+    this.isLoading = true;
     this.leerlingService.getLeerlingen().subscribe({
       next: (data) => {
         this.leerlingen.data = data;
-        this.leerlingen.sort = this.sort;
         this.leerlingen.sortingDataAccessor = (item, property) => {
           switch (property) {
             case 'coachNaam':
@@ -88,10 +91,13 @@ export class AppComponent implements OnInit {
               return (item as any)[property];
           }
         };
+        this.isLoading = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching leerlingen', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }

@@ -16,7 +16,9 @@
     </mat-card-header>
     
     <mat-card-content>
-      @if (leerlingen.data.length > 0) {
+      @if (isLoading) {
+        <p class="loading-text">Data wordt geladen...</p>
+      } @else if (leerlingen.data.length > 0) {
         <table mat-table [dataSource]="leerlingen" matSort class="mat-elevation-z8">
           
           <!-- Naam Column -->
@@ -134,7 +136,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
       } @else {
-        <p class="loading-text">Geen leerlingen gevonden of data wordt geladen...</p>
+        <p class="loading-text">Geen leerlingen gevonden</p>
       }
     </mat-card-content>
   </mat-card>

@@ -2,6 +2,8 @@ package nl.digitaleschool
 
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.slf4j.LoggerFactory
@@ -19,6 +21,16 @@ class CoachController {
             DatabaseFactory.fetchCoaches()
         } catch (e: Exception) {
             logger.error("Fout bij het ophalen van coaches", e)
+            throw e
+        }
+    }
+
+    @PostMapping
+    fun addCoach(@RequestBody coach: Coach) {
+        try {
+            DatabaseFactory.addCoach(coach.naam)
+        } catch (e: Exception) {
+            logger.error("Fout bij het toevoegen van coach", e)
             throw e
         }
     }

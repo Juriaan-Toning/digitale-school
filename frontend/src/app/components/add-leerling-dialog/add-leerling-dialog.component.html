@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>Leerling toevoegen</h2>
+<mat-dialog-content class="dialog-content">
+  <div class="form-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Naam</mat-label>
+      <input matInput [(ngModel)]="leerling.naam" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Coach</mat-label>
+      <mat-select [(ngModel)]="leerling.coachId">
+        <mat-option [value]="null">Geen coach</mat-option>
+        @for (coach of coaches; track coach.id) {
+          <mat-option [value]="coach.id">{{coach.naam}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Startgesprek</mat-label>
+      <input matInput [matDatepicker]="pickerStart" [matDatepickerFilter]="myFilter" [(ngModel)]="leerling.startGesprek">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Evaluatie 1</mat-label>
+      <input matInput [matDatepicker]="picker1" [matDatepickerFilter]="myFilter" [(ngModel)]="leerling.evaluatieGesprek1">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Evaluatie 2</mat-label>
+      <input matInput [matDatepicker]="picker2" [matDatepickerFilter]="myFilter" [(ngModel)]="leerling.evaluatieGesprek2">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Evaluatie 3</mat-label>
+      <input matInput [matDatepicker]="picker3" [matDatepickerFilter]="myFilter" [(ngModel)]="leerling.evaluatieGesprek3">
+      <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+      <mat-datepicker #picker3></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Evaluatie 4</mat-label>
+      <input matInput [matDatepicker]="picker4" [matDatepickerFilter]="myFilter" [(ngModel)]="leerling.evaluatieGesprek4">
+      <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+      <mat-datepicker #picker4></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Eindgesprek</mat-label>
+      <input matInput [matDatepicker]="pickerEind" [matDatepickerFilter]="myFilter" [(ngModel)]="leerling.eindGesprek">
+      <mat-datepicker-toggle matSuffix [for]="pickerEind"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEind></mat-datepicker>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Annuleren</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="leerling" [disabled]="!leerling.naam">Toevoegen</button>
+</mat-dialog-actions>

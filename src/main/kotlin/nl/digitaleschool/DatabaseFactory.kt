@@ -87,6 +87,38 @@ object DatabaseFactory {
         }
     }
 
+    fun addLeerling(leerling: Leerling) {
+        getConnection().use { connection ->
+            val query = """
+                INSERT INTO leerlingen (naam, coach, eval_gesprek_1, eval_gesprek_2, eval_gesprek_3, eval_gesprek_4, eindgesprek, startgesprek)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """.trimIndent()
+            val statement = connection.prepareStatement(query)
+            statement.setString(1, leerling.naam)
+            if (leerling.coachId != null) {
+                statement.setInt(2, leerling.coachId)
+            } else {
+                statement.setNull(2, java.sql.Types.INTEGER)
+            }
+            statement.setDate(3, leerling.evaluatieGesprek1?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(4, leerling.evaluatieGesprek2?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(5, leerling.evaluatieGesprek3?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(6, leerling.evaluatieGesprek4?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(7, leerling.eindGesprek?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(8, leerling.startGesprek?.let { java.sql.Date.valueOf(it) })
+            statement.executeUpdate()
+        }
+    }
+
+    fun addCoach(naam: String) {
+        getConnection().use { connection ->
+            val query = "INSERT INTO coaches (naam) VALUES (?)"
+            val statement = connection.prepareStatement(query)
+            statement.setString(1, naam)
+            statement.executeUpdate()
+        }
+    }
+
     fun fetchCoaches(): List<Coach> {
         val coaches = mutableListOf<Coach>()
         getConnection().use { connection ->

@@ -22,4 +22,12 @@ export class LeerlingService {
   updateLeerling(leerling: Leerling): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${leerling.id}`, leerling);
   }
+
+  addLeerling(leerling: Partial<Leerling>): Observable<void> {
+    return this.http.post<void>(this.apiUrl, leerling);
+  }
+
+  addCoach(naam: String): Observable<void> {
+    return this.http.post<void>('/api/coaches', { naam });
+  }
 }

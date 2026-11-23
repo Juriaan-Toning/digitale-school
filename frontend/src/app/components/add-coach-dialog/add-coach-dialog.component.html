@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Coach toevoegen</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" style="width: 100%; margin-top: 10px;">
+    <mat-label>Naam</mat-label>
+    <input matInput [(ngModel)]="naam" required>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Annuleren</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="naam" [disabled]="!naam">Toevoegen</button>
+</mat-dialog-actions>

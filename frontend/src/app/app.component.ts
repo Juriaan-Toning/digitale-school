@@ -1,22 +1,26 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { LeerlingService } from './leerling.service';
-import { Leerling } from './leerling.model';
-import { Coach } from './coach.model';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {LeerlingService} from './leerling.service';
+import {Leerling} from './leerling.model';
+import {Coach} from './coach.model';
 
 // Material Imports
-import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
+import {MatTableModule} from '@angular/material/table';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+
+import {AddLeerlingDialogComponent} from './components/add-leerling-dialog/add-leerling-dialog.component';
+import {AddCoachDialogComponent} from './components/add-coach-dialog/add-coach-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +38,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatNativeDateModule,
     MatIconModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -57,6 +62,7 @@ export class AppComponent implements OnInit {
 
   private leerlingService = inject(LeerlingService);
   private cdr = inject(ChangeDetectorRef);
+  private dialog = inject(MatDialog);
 
   ngOnInit() {
     this.loadLeerlingen();
@@ -85,14 +91,6 @@ export class AppComponent implements OnInit {
         console.error('Error fetching coaches', err);
       }
     });
-  }
-
-  editField(id: number, field: string) {
-    this.editingField = { id, field };
-  }
-
-  isEditing(id: number, field: string): boolean {
-    return this.editingField?.id === id && this.editingField?.field === field;
   }
 
   onDateChange(leerling: Leerling, field: keyof Leerling, event: any) {
@@ -145,4 +143,33 @@ export class AppComponent implements OnInit {
     // Voorkom zaterdag en zondag.
     return day !== 0 && day !== 6;
   };
+
+  openAddLeerlingDialog() {
+    const dialogRef = this.dialog.open(AddLeerlingDialogComponent, {
+      width: '600px',
+      data: { coaches: this.coaches }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.leerlingService.addLeerling(result).subscribe(() => {
+          this.loadLeerlingen();
+        });
+      }
+    });
+  }
+
+  openAddCoachDialog() {
+    const dialogRef = this.dialog.open(AddCoachDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.leerlingService.addCoach(result).subscribe(() => {
+          this.loadCoaches();
+        });
+      }
+    });
+  }
 }

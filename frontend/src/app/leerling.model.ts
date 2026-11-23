@@ -2,10 +2,10 @@ export interface Leerling {
   id: number;
   naam: string;
   coachNaam: string | null;
-  evaluatieGesprek1: string;
-  evaluatieGesprek2: string;
-  evaluatieGesprek3: string;
-  evaluatieGesprek4: string;
-  eindGesprek: string;
-  startGesprek: string;
+  evaluatieGesprek1: string | null;
+  evaluatieGesprek2: string | null;
+  evaluatieGesprek3: string | null;
+  evaluatieGesprek4: string | null;
+  eindGesprek: string | null;
+  startGesprek: string | null;
 }

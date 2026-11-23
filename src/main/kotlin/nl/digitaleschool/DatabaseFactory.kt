@@ -47,12 +47,12 @@ object DatabaseFactory {
                         id = resultSet.getInt("id"),
                         naam = resultSet.getString("naam"),
                         coachNaam = resultSet.getString("coach_naam"),
-                        evaluatieGesprek1 = resultSet.getDate("eval_gesprek_1").toLocalDate(),
-                        evaluatieGesprek2 = resultSet.getDate("eval_gesprek_2").toLocalDate(),
-                        evaluatieGesprek3 = resultSet.getDate("eval_gesprek_3").toLocalDate(),
-                        evaluatieGesprek4 = resultSet.getDate("eval_gesprek_4").toLocalDate(),
-                        eindGesprek = resultSet.getDate("eindgesprek").toLocalDate(),
-                        startGesprek = resultSet.getDate("startgesprek").toLocalDate()
+                        evaluatieGesprek1 = resultSet.getDate("eval_gesprek_1")?.toLocalDate(),
+                        evaluatieGesprek2 = resultSet.getDate("eval_gesprek_2")?.toLocalDate(),
+                        evaluatieGesprek3 = resultSet.getDate("eval_gesprek_3")?.toLocalDate(),
+                        evaluatieGesprek4 = resultSet.getDate("eval_gesprek_4")?.toLocalDate(),
+                        eindGesprek = resultSet.getDate("eindgesprek")?.toLocalDate(),
+                        startGesprek = resultSet.getDate("startgesprek")?.toLocalDate()
                     )
                 )
             }
@@ -69,12 +69,12 @@ object DatabaseFactory {
             """.trimIndent()
             
             val statement = connection.prepareStatement(query)
-            statement.setDate(1, java.sql.Date.valueOf(leerling.evaluatieGesprek1))
-            statement.setDate(2, java.sql.Date.valueOf(leerling.evaluatieGesprek2))
-            statement.setDate(3, java.sql.Date.valueOf(leerling.evaluatieGesprek3))
-            statement.setDate(4, java.sql.Date.valueOf(leerling.evaluatieGesprek4))
-            statement.setDate(5, java.sql.Date.valueOf(leerling.eindGesprek))
-            statement.setDate(6, java.sql.Date.valueOf(leerling.startGesprek))
+            statement.setDate(1, leerling.evaluatieGesprek1?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(2, leerling.evaluatieGesprek2?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(3, leerling.evaluatieGesprek3?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(4, leerling.evaluatieGesprek4?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(5, leerling.eindGesprek?.let { java.sql.Date.valueOf(it) })
+            statement.setDate(6, leerling.startGesprek?.let { java.sql.Date.valueOf(it) })
             statement.setInt(7, leerling.id)
             
             statement.executeUpdate()

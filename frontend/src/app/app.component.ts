@@ -196,11 +196,11 @@ export class AppComponent implements OnInit {
     if (alleDatumVeldenLeeg || geenCoach) {
       let reden = '';
       if (geenCoach && alleDatumVeldenLeeg) {
-        reden = 'Er is geen coach toegewezen en alle datumvelden zijn nog leeg.';
+        reden = 'Er is geen coach toegewezen en er zijn nog geen gesprekken ingepland.';
       } else if (geenCoach) {
         reden = 'Er is geen coach toegewezen.';
       } else {
-        reden = 'Alle datumvelden zijn nog leeg.';
+        reden = 'Er is nog geen startgesprek ingepland.';
       }
       return { cssClass: 'row-warning', title: reden };
     }
@@ -212,7 +212,7 @@ export class AppComponent implements OnInit {
     if (heeftLegeVelden && laatsteDatumInVerleden) {
       return { 
         cssClass: 'row-danger', 
-        title: 'Er zijn nog lege datumvelden, maar de laatst ingevulde datum ligt in het verleden.' 
+        title: 'Het laatste gesprek is geweest, maar er is nog geen nieuw gesprek ingepland.'
       };
     }
 

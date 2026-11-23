@@ -1,6 +1,7 @@
 import {ChangeDetectorRef, Component, inject, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {RouterOutlet} from '@angular/router';
 import {LeerlingService} from '../../services/leerling.service';
 import {AuthService} from '../../services/auth.service';
 import {Leerling} from '../../models/leerling.model';
@@ -29,6 +30,7 @@ import {AddCoachDialogComponent} from '../add-coach-dialog/add-coach-dialog.comp
   imports: [
     CommonModule, 
     FormsModule,
+    RouterOutlet,
     MatTableModule,
     MatToolbarModule,
     MatCardModule,

@@ -6,17 +6,69 @@
     <table>
       <thead>
         <tr>
-          <th>ID</th>
           <th>Naam</th>
           <th>Coach</th>
+          <th>Startgesprek</th>
+          <th>Eval 1</th>
+          <th>Eval 2</th>
+          <th>Eval 3</th>
+          <th>Eval 4</th>
+          <th>Eindgesprek</th>
         </tr>
       </thead>
       <tbody>
         @for (leerling of leerlingen; track leerling.id) {
           <tr>
-            <td>{{ leerling.id }}</td>
             <td>{{ leerling.naam }}</td>
             <td>{{ leerling.coachNaam || 'Geen coach' }}</td>
+            
+            <td class="editable" (click)="editField(leerling.id, 'startGesprek')">
+              @if (isEditing(leerling.id, 'startGesprek')) {
+                <input type="date" [ngModel]="leerling.startGesprek" (change)="onDateChange(leerling, 'startGesprek', $event)" (blur)="stopEditing()">
+              } @else {
+                {{ leerling.startGesprek | date:'dd-MM-yyyy' }}
+              }
+            </td>
+            
+            <td class="editable" (click)="editField(leerling.id, 'evaluatieGesprek1')">
+              @if (isEditing(leerling.id, 'evaluatieGesprek1')) {
+                <input type="date" [ngModel]="leerling.evaluatieGesprek1" (change)="onDateChange(leerling, 'evaluatieGesprek1', $event)" (blur)="stopEditing()">
+              } @else {
+                {{ leerling.evaluatieGesprek1 | date:'dd-MM-yyyy' }}
+              }
+            </td>
+            
+            <td class="editable" (click)="editField(leerling.id, 'evaluatieGesprek2')">
+              @if (isEditing(leerling.id, 'evaluatieGesprek2')) {
+                <input type="date" [ngModel]="leerling.evaluatieGesprek2" (change)="onDateChange(leerling, 'evaluatieGesprek2', $event)" (blur)="stopEditing()">
+              } @else {
+                {{ leerling.evaluatieGesprek2 | date:'dd-MM-yyyy' }}
+              }
+            </td>
+            
+            <td class="editable" (click)="editField(leerling.id, 'evaluatieGesprek3')">
+              @if (isEditing(leerling.id, 'evaluatieGesprek3')) {
+                <input type="date" [ngModel]="leerling.evaluatieGesprek3" (change)="onDateChange(leerling, 'evaluatieGesprek3', $event)" (blur)="stopEditing()">
+              } @else {
+                {{ leerling.evaluatieGesprek3 | date:'dd-MM-yyyy' }}
+              }
+            </td>
+            
+            <td class="editable" (click)="editField(leerling.id, 'evaluatieGesprek4')">
+              @if (isEditing(leerling.id, 'evaluatieGesprek4')) {
+                <input type="date" [ngModel]="leerling.evaluatieGesprek4" (change)="onDateChange(leerling, 'evaluatieGesprek4', $event)" (blur)="stopEditing()">
+              } @else {
+                {{ leerling.evaluatieGesprek4 | date:'dd-MM-yyyy' }}
+              }
+            </td>
+            
+            <td class="editable" (click)="editField(leerling.id, 'eindGesprek')">
+              @if (isEditing(leerling.id, 'eindGesprek')) {
+                <input type="date" [ngModel]="leerling.eindGesprek" (change)="onDateChange(leerling, 'eindGesprek', $event)" (blur)="stopEditing()">
+              } @else {
+                {{ leerling.eindGesprek | date:'dd-MM-yyyy' }}
+              }
+            </td>
           </tr>
         }
       </tbody>

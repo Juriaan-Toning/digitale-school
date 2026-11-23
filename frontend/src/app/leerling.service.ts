@@ -13,4 +13,8 @@ export class LeerlingService {
   getLeerlingen(): Observable<Leerling[]> {
     return this.http.get<Leerling[]>(this.apiUrl);
   }
+
+  updateLeerling(leerling: Leerling): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${leerling.id}`, leerling);
+  }
 }

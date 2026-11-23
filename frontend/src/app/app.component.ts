@@ -163,7 +163,7 @@ export class AppComponent implements OnInit {
     return day !== 0 && day !== 6;
   };
 
-  getRowClass(leerling: Leerling): string {
+  private getLeerlingStatus(leerling: Leerling): { cssClass: string, title: string } {
     const datumVelden = [
       leerling.startGesprek,
       leerling.evaluatieGesprek1,
@@ -184,14 +184,25 @@ export class AppComponent implements OnInit {
                                                  ingevuldeDatums.every(d => d < nu);
 
     if (alleGesprekveldenIngevuldEnInVerleden) {
-      return 'row-past';
+      return { 
+        cssClass: 'row-past', 
+        title: 'Alle gesprekken zijn afgerond (liggen in het verleden).' 
+      };
     }
 
     const alleDatumVeldenLeeg = datumVelden.every(d => d === null || d === '');
     const geenCoach = leerling.coachId === null;
 
     if (alleDatumVeldenLeeg || geenCoach) {
-      return 'row-warning';
+      let reden = '';
+      if (geenCoach && alleDatumVeldenLeeg) {
+        reden = 'Er is geen coach toegewezen en alle datumvelden zijn nog leeg.';
+      } else if (geenCoach) {
+        reden = 'Er is geen coach toegewezen.';
+      } else {
+        reden = 'Alle datumvelden zijn nog leeg.';
+      }
+      return { cssClass: 'row-warning', title: reden };
     }
 
     const heeftLegeVelden = datumVelden.some(d => d === null || d === '');
@@ -199,10 +210,21 @@ export class AppComponent implements OnInit {
                                    Math.max(...ingevuldeDatums.map(d => d.getTime())) < nu.getTime();
 
     if (heeftLegeVelden && laatsteDatumInVerleden) {
-      return 'row-danger';
+      return { 
+        cssClass: 'row-danger', 
+        title: 'Er zijn nog lege datumvelden, maar de laatst ingevulde datum ligt in het verleden.' 
+      };
     }
 
-    return '';
+    return { cssClass: '', title: '' };
+  }
+
+  getRowClass(leerling: Leerling): string {
+    return this.getLeerlingStatus(leerling).cssClass;
+  }
+
+  getRowTitle(leerling: Leerling): string {
+    return this.getLeerlingStatus(leerling).title;
   }
 
   openAddLeerlingDialog() {

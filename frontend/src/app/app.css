@@ -61,10 +61,10 @@ mat-card {
 }
 
 .row-danger {
-  background-color: #ffebee; /* Rood licht */
+  background-color: #f8d7da; /* Iets donkerder rood/roze */
 }
 
 /* Zorg dat de kleuren ook zichtbaar zijn bij hover of selectie als dat nodig is */
 tr.mat-mdc-row.row-past:hover { background-color: #e0e0e0; }
 tr.mat-mdc-row.row-warning:hover { background-color: #ffe0b2; }
-tr.mat-mdc-row.row-danger:hover { background-color: #ffcdd2; }
+tr.mat-mdc-row.row-danger:hover { background-color: #f5c6cb; }

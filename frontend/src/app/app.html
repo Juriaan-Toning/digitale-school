@@ -21,14 +21,23 @@
           <!-- Coach Column -->
           <ng-container matColumnDef="coachNaam">
             <th mat-header-cell *matHeaderCellDef> Coach </th>
-            <td mat-cell *matCellDef="let leerling"> {{leerling.coachNaam || 'Geen coach'}} </td>
+            <td mat-cell *matCellDef="let leerling">
+              <mat-form-field appearance="fill">
+                <mat-select [value]="leerling.coachId" (selectionChange)="onCoachChange(leerling, $event.value)">
+                  <mat-option [value]="null">Geen coach</mat-option>
+                  @for (coach of coaches; track coach.id) {
+                    <mat-option [value]="coach.id">{{coach.naam}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </td>
           </ng-container>
 
           <!-- Startgesprek Column -->
           <ng-container matColumnDef="startGesprek">
             <th mat-header-cell *matHeaderCellDef> Startgesprek </th>
             <td mat-cell *matCellDef="let leerling">
-              <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+              <mat-form-field appearance="fill" (click)="$event.stopPropagation()">
                 <input matInput [matDatepicker]="pickerStart" 
                        [matDatepickerFilter]="myFilter"
                        [value]="leerling.startGesprek"
@@ -43,7 +52,7 @@
           <ng-container matColumnDef="evaluatieGesprek1">
             <th mat-header-cell *matHeaderCellDef> Eval 1 </th>
             <td mat-cell *matCellDef="let leerling">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="picker1" 
                        [matDatepickerFilter]="myFilter"
                        [value]="leerling.evaluatieGesprek1"
@@ -58,7 +67,7 @@
           <ng-container matColumnDef="evaluatieGesprek2">
             <th mat-header-cell *matHeaderCellDef> Eval 2 </th>
             <td mat-cell *matCellDef="let leerling">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="picker2" 
                        [matDatepickerFilter]="myFilter"
                        [value]="leerling.evaluatieGesprek2"
@@ -73,7 +82,7 @@
           <ng-container matColumnDef="evaluatieGesprek3">
             <th mat-header-cell *matHeaderCellDef> Eval 3 </th>
             <td mat-cell *matCellDef="let leerling">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="picker3" 
                        [matDatepickerFilter]="myFilter"
                        [value]="leerling.evaluatieGesprek3"
@@ -88,7 +97,7 @@
           <ng-container matColumnDef="evaluatieGesprek4">
             <th mat-header-cell *matHeaderCellDef> Eval 4 </th>
             <td mat-cell *matCellDef="let leerling">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="picker4" 
                        [matDatepickerFilter]="myFilter"
                        [value]="leerling.evaluatieGesprek4"
@@ -103,7 +112,7 @@
           <ng-container matColumnDef="eindGesprek">
             <th mat-header-cell *matHeaderCellDef> Eindgesprek </th>
             <td mat-cell *matCellDef="let leerling">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <input matInput [matDatepicker]="pickerEind" 
                        [matDatepickerFilter]="myFilter"
                        [value]="leerling.eindGesprek"

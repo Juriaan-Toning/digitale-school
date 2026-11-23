@@ -2,6 +2,7 @@ export interface Leerling {
   id: number;
   naam: string;
   coachNaam: string | null;
+  coachId: number | null;
   evaluatieGesprek1: string | null;
   evaluatieGesprek2: string | null;
   evaluatieGesprek3: string | null;

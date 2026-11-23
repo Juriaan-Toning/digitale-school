@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LeerlingService } from './leerling.service';
 import { Leerling } from './leerling.model';
+import { Coach } from './coach.model';
 
 // Material Imports
 import { MatTableModule } from '@angular/material/table';
@@ -15,6 +16,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +33,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSelectModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -39,6 +42,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class AppComponent implements OnInit {
   title = 'Digitale School';
   leerlingen: Leerling[] = [];
+  coaches: Coach[] = [];
   displayedColumns: string[] = [
     'naam', 
     'coachNaam', 
@@ -56,6 +60,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.loadLeerlingen();
+    this.loadCoaches();
   }
 
   loadLeerlingen() {
@@ -66,6 +71,18 @@ export class AppComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error fetching leerlingen', err);
+      }
+    });
+  }
+
+  loadCoaches() {
+    this.leerlingService.getCoaches().subscribe({
+      next: (data) => {
+        this.coaches = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error fetching coaches', err);
       }
     });
   }
@@ -100,10 +117,19 @@ export class AppComponent implements OnInit {
     (leerling as any)[field] = formattedDate;
     
     // Sla op in backend
+    this.saveLeerling(leerling);
+  }
+
+  onCoachChange(leerling: Leerling, coachId: number | null) {
+    leerling.coachId = coachId;
+    this.saveLeerling(leerling);
+  }
+
+  private saveLeerling(leerling: Leerling) {
     this.leerlingService.updateLeerling(leerling).subscribe({
       next: () => {
         this.editingField = null;
-        this.cdr.detectChanges();
+        this.loadLeerlingen(); // Reload to get the new coach name from the JOIN
       },
       error: (err) => {
         console.error('Error updating leerling', err);

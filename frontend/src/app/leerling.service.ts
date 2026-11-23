@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Leerling } from './leerling.model';
+import { Coach } from './coach.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,10 @@ export class LeerlingService {
 
   getLeerlingen(): Observable<Leerling[]> {
     return this.http.get<Leerling[]>(this.apiUrl);
+  }
+
+  getCoaches(): Observable<Coach[]> {
+    return this.http.get<Coach[]>('/api/coaches');
   }
 
   updateLeerling(leerling: Leerling): Observable<void> {

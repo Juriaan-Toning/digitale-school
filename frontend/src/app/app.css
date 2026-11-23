@@ -7,15 +7,15 @@ table {
 }
 
 .mat-column-naam {
-  width: 150px;
+  width: 120px;
 }
 
 .mat-column-coachNaam {
-  width: 150px;
+  width: 200px;
 }
 
 mat-form-field {
-  width: 140px;
+  width: 170px;
 }
 
 /* Stijl voor mat-form-field in tabel om compacter te zijn */

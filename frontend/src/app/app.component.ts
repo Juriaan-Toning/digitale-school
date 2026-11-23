@@ -5,16 +5,50 @@ import { FormsModule } from '@angular/forms';
 import { LeerlingService } from './leerling.service';
 import { Leerling } from './leerling.model';
 
+// Material Imports
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, FormsModule],
+  imports: [
+    RouterOutlet, 
+    CommonModule, 
+    FormsModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class AppComponent implements OnInit {
   title = 'Digitale School';
   leerlingen: Leerling[] = [];
+  displayedColumns: string[] = [
+    'naam', 
+    'coachNaam', 
+    'startGesprek', 
+    'evaluatieGesprek1', 
+    'evaluatieGesprek2', 
+    'evaluatieGesprek3', 
+    'evaluatieGesprek4', 
+    'eindGesprek'
+  ];
   editingField: { id: number, field: string } | null = null;
 
   private leerlingService = inject(LeerlingService);
@@ -45,7 +79,7 @@ export class AppComponent implements OnInit {
   }
 
   onDateChange(leerling: Leerling, field: keyof Leerling, event: any) {
-    const value = event.target.value;
+    const value = event.value; // MatDatepicker event has .value
     if (!value) return;
 
     const date = new Date(value);
@@ -57,8 +91,13 @@ export class AppComponent implements OnInit {
       return;
     }
 
+    // Formatteer naar yyyy-mm-dd voor backend (ISO string split)
+    const offset = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+    const formattedDate = adjustedDate.toISOString().split('T')[0];
+
     // Update lokaal
-    (leerling as any)[field] = value;
+    (leerling as any)[field] = formattedDate;
     
     // Sla op in backend
     this.leerlingService.updateLeerling(leerling).subscribe({
@@ -75,7 +114,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  stopEditing() {
-    this.editingField = null;
-  }
+  myFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Voorkom zaterdag en zondag.
+    return day !== 0 && day !== 6;
+  };
 }

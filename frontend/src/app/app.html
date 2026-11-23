@@ -1,81 +1,127 @@
-<div class="container">
-  <h1>{{ title }}</h1>
+<mat-toolbar color="primary">
+  <span>{{ title }}</span>
+</mat-toolbar>
 
-  <h2>Leerlingen en hun Coaches</h2>
-  @if (leerlingen.length > 0) {
-    <table>
-      <thead>
-        <tr>
-          <th>Naam</th>
-          <th>Coach</th>
-          <th>Startgesprek</th>
-          <th>Eval 1</th>
-          <th>Eval 2</th>
-          <th>Eval 3</th>
-          <th>Eval 4</th>
-          <th>Eindgesprek</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (leerling of leerlingen; track leerling.id) {
-          <tr>
-            <td>{{ leerling.naam }}</td>
-            <td>{{ leerling.coachNaam || 'Geen coach' }}</td>
-            
-            <td class="editable" (click)="editField(leerling.id, 'startGesprek')">
-              @if (isEditing(leerling.id, 'startGesprek')) {
-                <input type="date" [ngModel]="leerling.startGesprek" (change)="onDateChange(leerling, 'startGesprek', $event)" (blur)="stopEditing()">
-              } @else {
-                {{ leerling.startGesprek | date:'dd-MM-yyyy' }}
-              }
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Leerlingen en hun Coaches</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      @if (leerlingen.length > 0) {
+        <table mat-table [dataSource]="leerlingen" class="mat-elevation-z8">
+          
+          <!-- Naam Column -->
+          <ng-container matColumnDef="naam">
+            <th mat-header-cell *matHeaderCellDef> Naam </th>
+            <td mat-cell *matCellDef="let leerling"> {{leerling.naam}} </td>
+          </ng-container>
+
+          <!-- Coach Column -->
+          <ng-container matColumnDef="coachNaam">
+            <th mat-header-cell *matHeaderCellDef> Coach </th>
+            <td mat-cell *matCellDef="let leerling"> {{leerling.coachNaam || 'Geen coach'}} </td>
+          </ng-container>
+
+          <!-- Startgesprek Column -->
+          <ng-container matColumnDef="startGesprek">
+            <th mat-header-cell *matHeaderCellDef> Startgesprek </th>
+            <td mat-cell *matCellDef="let leerling">
+              <mat-form-field appearance="outline" (click)="$event.stopPropagation()">
+                <input matInput [matDatepicker]="pickerStart" 
+                       [matDatepickerFilter]="myFilter"
+                       [value]="leerling.startGesprek"
+                       (dateChange)="onDateChange(leerling, 'startGesprek', $event)">
+                <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                <mat-datepicker #pickerStart></mat-datepicker>
+              </mat-form-field>
             </td>
-            
-            <td class="editable" (click)="editField(leerling.id, 'evaluatieGesprek1')">
-              @if (isEditing(leerling.id, 'evaluatieGesprek1')) {
-                <input type="date" [ngModel]="leerling.evaluatieGesprek1" (change)="onDateChange(leerling, 'evaluatieGesprek1', $event)" (blur)="stopEditing()">
-              } @else {
-                {{ leerling.evaluatieGesprek1 | date:'dd-MM-yyyy' }}
-              }
+          </ng-container>
+
+          <!-- Eval 1 Column -->
+          <ng-container matColumnDef="evaluatieGesprek1">
+            <th mat-header-cell *matHeaderCellDef> Eval 1 </th>
+            <td mat-cell *matCellDef="let leerling">
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="picker1" 
+                       [matDatepickerFilter]="myFilter"
+                       [value]="leerling.evaluatieGesprek1"
+                       (dateChange)="onDateChange(leerling, 'evaluatieGesprek1', $event)">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
             </td>
-            
-            <td class="editable" (click)="editField(leerling.id, 'evaluatieGesprek2')">
-              @if (isEditing(leerling.id, 'evaluatieGesprek2')) {
-                <input type="date" [ngModel]="leerling.evaluatieGesprek2" (change)="onDateChange(leerling, 'evaluatieGesprek2', $event)" (blur)="stopEditing()">
-              } @else {
-                {{ leerling.evaluatieGesprek2 | date:'dd-MM-yyyy' }}
-              }
+          </ng-container>
+
+          <!-- Eval 2 Column -->
+          <ng-container matColumnDef="evaluatieGesprek2">
+            <th mat-header-cell *matHeaderCellDef> Eval 2 </th>
+            <td mat-cell *matCellDef="let leerling">
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="picker2" 
+                       [matDatepickerFilter]="myFilter"
+                       [value]="leerling.evaluatieGesprek2"
+                       (dateChange)="onDateChange(leerling, 'evaluatieGesprek2', $event)">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
             </td>
-            
-            <td class="editable" (click)="editField(leerling.id, 'evaluatieGesprek3')">
-              @if (isEditing(leerling.id, 'evaluatieGesprek3')) {
-                <input type="date" [ngModel]="leerling.evaluatieGesprek3" (change)="onDateChange(leerling, 'evaluatieGesprek3', $event)" (blur)="stopEditing()">
-              } @else {
-                {{ leerling.evaluatieGesprek3 | date:'dd-MM-yyyy' }}
-              }
+          </ng-container>
+
+          <!-- Eval 3 Column -->
+          <ng-container matColumnDef="evaluatieGesprek3">
+            <th mat-header-cell *matHeaderCellDef> Eval 3 </th>
+            <td mat-cell *matCellDef="let leerling">
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="picker3" 
+                       [matDatepickerFilter]="myFilter"
+                       [value]="leerling.evaluatieGesprek3"
+                       (dateChange)="onDateChange(leerling, 'evaluatieGesprek3', $event)">
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+              </mat-form-field>
             </td>
-            
-            <td class="editable" (click)="editField(leerling.id, 'evaluatieGesprek4')">
-              @if (isEditing(leerling.id, 'evaluatieGesprek4')) {
-                <input type="date" [ngModel]="leerling.evaluatieGesprek4" (change)="onDateChange(leerling, 'evaluatieGesprek4', $event)" (blur)="stopEditing()">
-              } @else {
-                {{ leerling.evaluatieGesprek4 | date:'dd-MM-yyyy' }}
-              }
+          </ng-container>
+
+          <!-- Eval 4 Column -->
+          <ng-container matColumnDef="evaluatieGesprek4">
+            <th mat-header-cell *matHeaderCellDef> Eval 4 </th>
+            <td mat-cell *matCellDef="let leerling">
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="picker4" 
+                       [matDatepickerFilter]="myFilter"
+                       [value]="leerling.evaluatieGesprek4"
+                       (dateChange)="onDateChange(leerling, 'evaluatieGesprek4', $event)">
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+              </mat-form-field>
             </td>
-            
-            <td class="editable" (click)="editField(leerling.id, 'eindGesprek')">
-              @if (isEditing(leerling.id, 'eindGesprek')) {
-                <input type="date" [ngModel]="leerling.eindGesprek" (change)="onDateChange(leerling, 'eindGesprek', $event)" (blur)="stopEditing()">
-              } @else {
-                {{ leerling.eindGesprek | date:'dd-MM-yyyy' }}
-              }
+          </ng-container>
+
+          <!-- Eindgesprek Column -->
+          <ng-container matColumnDef="eindGesprek">
+            <th mat-header-cell *matHeaderCellDef> Eindgesprek </th>
+            <td mat-cell *matCellDef="let leerling">
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="pickerEind" 
+                       [matDatepickerFilter]="myFilter"
+                       [value]="leerling.eindGesprek"
+                       (dateChange)="onDateChange(leerling, 'eindGesprek', $event)">
+                <mat-datepicker-toggle matSuffix [for]="pickerEind"></mat-datepicker-toggle>
+                <mat-datepicker #pickerEind></mat-datepicker>
+              </mat-form-field>
             </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  } @else {
-    <p>Geen leerlingen gevonden of data wordt geladen...</p>
-  }
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      } @else {
+        <p class="loading-text">Geen leerlingen gevonden of data wordt geladen...</p>
+      }
+    </mat-card-content>
+  </mat-card>
 
   <router-outlet></router-outlet>
 </div>

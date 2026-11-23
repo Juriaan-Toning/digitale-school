@@ -51,3 +51,20 @@ mat-form-field {
 mat-card {
   margin-bottom: 24px;
 }
+
+.row-past {
+  background-color: #f0f0f0; /* Grijs */
+}
+
+.row-warning {
+  background-color: #fff3e0; /* Geel/Oranje licht */
+}
+
+.row-danger {
+  background-color: #ffebee; /* Rood licht */
+}
+
+/* Zorg dat de kleuren ook zichtbaar zijn bij hover of selectie als dat nodig is */
+tr.mat-mdc-row.row-past:hover { background-color: #e0e0e0; }
+tr.mat-mdc-row.row-warning:hover { background-color: #ffe0b2; }
+tr.mat-mdc-row.row-danger:hover { background-color: #ffcdd2; }

@@ -163,6 +163,48 @@ export class AppComponent implements OnInit {
     return day !== 0 && day !== 6;
   };
 
+  getRowClass(leerling: Leerling): string {
+    const datumVelden = [
+      leerling.startGesprek,
+      leerling.evaluatieGesprek1,
+      leerling.evaluatieGesprek2,
+      leerling.evaluatieGesprek3,
+      leerling.evaluatieGesprek4,
+      leerling.eindGesprek
+    ];
+
+    const nu = new Date();
+    nu.setHours(0, 0, 0, 0);
+
+    const ingevuldeDatums = datumVelden
+      .filter(d => d !== null && d !== '')
+      .map(d => new Date(d!));
+    
+    const alleGesprekveldenIngevuldEnInVerleden = datumVelden.every(d => d !== null && d !== '') && 
+                                                 ingevuldeDatums.every(d => d < nu);
+
+    if (alleGesprekveldenIngevuldEnInVerleden) {
+      return 'row-past';
+    }
+
+    const alleDatumVeldenLeeg = datumVelden.every(d => d === null || d === '');
+    const geenCoach = leerling.coachId === null;
+
+    if (alleDatumVeldenLeeg || geenCoach) {
+      return 'row-warning';
+    }
+
+    const heeftLegeVelden = datumVelden.some(d => d === null || d === '');
+    const laatsteDatumInVerleden = ingevuldeDatums.length > 0 && 
+                                   Math.max(...ingevuldeDatums.map(d => d.getTime())) < nu.getTime();
+
+    if (heeftLegeVelden && laatsteDatumInVerleden) {
+      return 'row-danger';
+    }
+
+    return '';
+  }
+
   openAddLeerlingDialog() {
     const dialogRef = this.dialog.open(AddLeerlingDialogComponent, {
       width: '600px',
